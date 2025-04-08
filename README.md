@@ -21,6 +21,7 @@ Key highlights:
 ## 📂 Dataset
 
 - **Source:** [Kaggle Credit Card Fraud Detection Dataset](https://huggingface.co/datasets/Nooha/cc_fraud_detection_dataset/tree/main/data)
+- Download from source
 - Features:
   - 2,646,694 transactions
   - 9,422 fraudulent cases (~0.36%)
