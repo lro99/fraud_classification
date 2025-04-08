@@ -31,6 +31,7 @@ Key highlights:
 ## 🧠 Model Architecture
 
 - Input Layer: 15 features
+- Attempted random forest, logistic regression w suboptimal results. Moved forward with mlp neural network
 - Hidden Layers: Fully connected (`Dense`) layers with ReLU activations
 - Dropout regularization to prevent overfitting
 - Output Layer: Single neuron with sigmoid activation for binary classification
