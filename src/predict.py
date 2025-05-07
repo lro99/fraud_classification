@@ -11,4 +11,8 @@ def predict(data_path, model_path):
     predictions.select("features", "prediction", "probability").show(10)
 
 if __name__ == "__main__":
+    data_path = [
+        "https://fraudclassificationdata.s3.us-west-1.amazonaws.com/train-00000-of-00002.parquet",
+        "https://fraudclassificationdata.s3.us-west-1.amazonaws.com/train-00001-of-00002.parquet"
+    ]
     predict("/path/to/data", "model/fraud_pipeline")
