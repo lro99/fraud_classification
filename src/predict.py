@@ -11,4 +11,4 @@ def predict(data_path, model_path):
     predictions.select("features", "prediction", "probability").show(10)
 
 if __name__ == "__main__":
-    predict("/path/to/data", "fraud_model")
+    predict("/path/to/data", "model/fraud_pipeline")
