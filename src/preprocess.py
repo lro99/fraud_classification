@@ -5,7 +5,7 @@ from pyspark.ml import Pipeline
 
 def preprocess_data(data_path):
   spark = SparkSession.builder.appName('FraudDetection').getOrCreate()
-  df = spark.read.parquet(data_path)
+  df = spark.read.parquet(*data_path)
 
   # label encoding multiple cols
   cols = ['gender', 'city', 'state', 'job', 'category', 'merchant']
