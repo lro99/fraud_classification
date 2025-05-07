@@ -14,4 +14,4 @@ def train_model(data_path, model_path):
     print(f"Model saved to {model_path}")
 
 if __name__ == "__main__":
-    train_model("/path/to/data", "model/fraud_pipeline")
+    train_model("https://fraudclassificationdata.s3.us-west-1.amazonaws.com/", "model/fraud_pipeline")
