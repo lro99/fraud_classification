@@ -31,6 +31,6 @@ def preprocess_data(data_path):
   df = df.withColumn('weight', when(col('is_fraud') == 1, weight_1).otherwise(weight_0))
   
   pipeline = Pipeline(stages=stages)
-  df = pipeline.fit(df).transform(df)
+  df = pipeline.fit(df)
 
   return df
