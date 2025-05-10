@@ -1,13 +1,14 @@
 from pyspark.ml.classification import LogisticRegression
 from pyspark.ml import Pipeline, PipelineModel
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import when, col
 from preprocess import preprocess_data
 
 def train_model(data_path, model_path):
     df = preprocess_data(data_path)
     train_df, _ = df.randomSplit([0.8, 0.2], seed=42)
 
-    lr = LogisticRegression(featuresCol='features', labelCol='is_fraud')
+    lr = LogisticRegression(featuresCol='features', labelCol='is_fraud', weightCol='weight')
     model = lr.fit(train_df)
 
     model.write().overwrite().save(model_path)
