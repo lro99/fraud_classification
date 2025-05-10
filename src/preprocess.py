@@ -23,6 +23,13 @@ def preprocess_data(data_path):
   assembler = VectorAssembler(inputCols=['gender_index', 'city_index', 'state_index', 'zip', 'city_pop', 'job_index', 'unix_time', 'category_index', 'amt', 'merchant_index'], outputCol='features')
   stages.append(assembler)
 
+  # weight col
+  neg, pos = df.groupBy('is_fraud').count().collect()
+  weight_0 = pos[1] / (pos[1] + neg[1])
+  weight_1 = neg[1] / (pos[1] + neg[1])
+
+  df = df.withColumn('weight', when(col('is_fraud') == 1, weight_1).otherwise(weight_0))
+  
   pipeline = Pipeline(stages=stages)
   df = pipeline.fit(df).transform(df)
 
