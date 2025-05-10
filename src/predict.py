@@ -15,4 +15,4 @@ if __name__ == "__main__":
         "https://fraudclassificationdata.s3.us-west-1.amazonaws.com/train-00000-of-00002.parquet",
         "https://fraudclassificationdata.s3.us-west-1.amazonaws.com/train-00001-of-00002.parquet"
     ]
-    predict("/path/to/data", "model/fraud_pipeline")
+    predict(data_path, "model/fraud_pipeline")
