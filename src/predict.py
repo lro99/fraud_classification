@@ -12,7 +12,7 @@ def predict(data_path, model_path):
 
 if __name__ == "__main__":
     data_path = [
-        "https://fraudclassificationdata.s3.us-west-1.amazonaws.com/train-00000-of-00002.parquet",
-        "https://fraudclassificationdata.s3.us-west-1.amazonaws.com/train-00001-of-00002.parquet"
+        "s3a://fraudclassificationdata.s3.us-west-1.amazonaws.com/train-00000-of-00002.parquet",
+        "s3a://fraudclassificationdata.s3.us-west-1.amazonaws.com/train-00001-of-00002.parquet"
     ]
     predict(data_path, "model/fraud_pipeline")
