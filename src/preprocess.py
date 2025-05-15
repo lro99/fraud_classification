@@ -1,23 +1,23 @@
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
 from pyspark.ml.feature import StringIndexer, VectorAssembler
 from pyspark.ml import Pipeline
 
 
-def preprocess_data(data_path):
-  spark = SparkSession.builder.appName('FraudDetection').getOrCreate()
-  df = spark.read.parquet(*data_path)
+def preprocess_data(df):
+  spark = SparkSession.builder.appName("FraudDetection").config("spark.hadoop.fs.s3a.aws.credentials.provider", "com.amazonaws.auth.DefaultAWSCredentialsProviderChain").config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem").config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.11.1026").getOrCreate()
 
   # label encoding multiple cols
   cols = ['gender', 'city', 'state', 'job', 'category', 'merchant']
   stages = []
-  for col in cols:
-      indexer = StringIndexer(inputCol=col, outputCol=col+'_index')
-    
+  for feature_col in cols:
+      indexer = StringIndexer(inputCol=feature_col, outputCol=feature_col+'_index')
+
       stages.append(indexer)
 
   # drop cols
   # ssn, cc_num, first, last, dob, trans_num, trans_date, trans_time
-  train_df = df.drop('ssn', 'cc_num', 'first', 'last', 'dob', 'trans_num', 'trans_date', 'trans_time')
+  df = df.drop('ssn', 'cc_num', 'first', 'last', 'dob', 'trans_num', 'trans_date', 'trans_time')
 
   # vector assembler
   assembler = VectorAssembler(inputCols=['gender_index', 'city_index', 'state_index', 'zip', 'city_pop', 'job_index', 'unix_time', 'category_index', 'amt', 'merchant_index'], outputCol='features')
@@ -29,8 +29,5 @@ def preprocess_data(data_path):
   weight_1 = neg[1] / (pos[1] + neg[1])
 
   df = df.withColumn('weight', when(col('is_fraud') == 1, weight_1).otherwise(weight_0))
-  
-  pipeline = Pipeline(stages=stages)
-  df = pipeline.fit(df)
 
-  return df
+  return df, stages
