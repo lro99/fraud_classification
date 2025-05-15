@@ -5,17 +5,18 @@ from pyspark.sql.functions import when, col
 from preprocess import preprocess_data
 
 def train_model(data_path, model_path):
-    df = preprocess_data(data_path)
-    train_df, _ = df.randomSplit([0.8, 0.2], seed=42)
+    
+    df, _ = df.randomSplit([0.8, 0.2], seed=42)
+    df, stages = preprocess_data(data_path)
 
+    # add logistic regression to pipeline
     lr = LogisticRegression(featuresCol='features', labelCol='is_fraud', weightCol='weight')
-    model = lr.fit(train_df)
 
-    model.write().overwrite().save(model_path)
-    print(f"Model saved to {model_path}")
+    stages.append(lr)
 
-if __name__ == "__main__":
-    data_path = ["s3a://fraudclassificationdata.s3.us-west-1.amazonaws.com/train-00000-of-00002.parquet",
-                 "s3a://fraudclassificationdata.s3.us-west-1.amazonaws.com/train-00001-of-00002.parquet"
-                ]
-    train_model(data_path, "model/fraud_pipeline")
+    # build pipeline
+    pipeline = Pipeline(stages=stages)
+    model = pipeline.fit(df)
+
+    # save model, will update location later
+    model.save('/content/drive/MyDrive/Documents/Data Career/fraud_classification/fraud_class_pyspark')
