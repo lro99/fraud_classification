@@ -1,6 +1,11 @@
-FROM apache/spark:latest
+FROM apache/spark-py:latest
+
+USER root
+
 WORKDIR /app
+
 COPY . /app
+
 # install python and pip
 RUN apt-get update && \
     apt-get install -y python3-pip && \
