@@ -24,12 +24,17 @@ def preprocess_data(df, mode="train"):
   stages.append(assembler)
 
   # only add weights if in training mode
-  if mode == "train":
+  if mode == "train" and 'is_fraud' in df.columns:
+
+    counts = df.groupBy('is_fraud').count().collect()
+    count_dict = {row['is_fraud']: row['count'] for row in counts}
+    neg = count_dict.get(0,1)
+    pos = count_dict.get(1,1)
+    total = pos + neg
     
   # weight col
-    neg, pos = df.groupBy('is_fraud').count().collect()
-    weight_0 = pos[1] / (pos[1] + neg[1])
-    weight_1 = neg[1] / (pos[1] + neg[1])
+    weight_0 = pos / total
+    weight_1 = neg / total
 
     df = df.withColumn('weight', when(col('is_fraud') == 1, weight_1).otherwise(weight_0))
 
