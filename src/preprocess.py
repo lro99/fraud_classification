@@ -4,7 +4,7 @@ from pyspark.ml.feature import StringIndexer, VectorAssembler
 from pyspark.ml import Pipeline
 
 
-def preprocess_data(df):
+def preprocess_data(df, mode="train"):
   spark = SparkSession.builder.appName("FraudDetection").config("spark.hadoop.fs.s3a.aws.credentials.provider", "com.amazonaws.auth.DefaultAWSCredentialsProviderChain").config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem").config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.11.1026").getOrCreate()
 
   # label encoding multiple cols
@@ -23,11 +23,14 @@ def preprocess_data(df):
   assembler = VectorAssembler(inputCols=['gender_index', 'city_index', 'state_index', 'zip', 'city_pop', 'job_index', 'unix_time', 'category_index', 'amt', 'merchant_index'], outputCol='features')
   stages.append(assembler)
 
+  # only add weights if in training mode
+  if mode == "train":
+    
   # weight col
-  neg, pos = df.groupBy('is_fraud').count().collect()
-  weight_0 = pos[1] / (pos[1] + neg[1])
-  weight_1 = neg[1] / (pos[1] + neg[1])
+    neg, pos = df.groupBy('is_fraud').count().collect()
+    weight_0 = pos[1] / (pos[1] + neg[1])
+    weight_1 = neg[1] / (pos[1] + neg[1])
 
-  df = df.withColumn('weight', when(col('is_fraud') == 1, weight_1).otherwise(weight_0))
+    df = df.withColumn('weight', when(col('is_fraud') == 1, weight_1).otherwise(weight_0))
 
   return df, stages
