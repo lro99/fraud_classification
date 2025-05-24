@@ -4,7 +4,7 @@ from pyspark.ml.feature import StringIndexer, VectorAssembler
 from pyspark.ml import Pipeline
 
 
-def preprocess_data(df, mode="train"):
+def preprocess_data(df):
   spark = SparkSession.builder.appName("FraudDetection").config("spark.hadoop.fs.s3a.aws.credentials.provider", "com.amazonaws.auth.DefaultAWSCredentialsProviderChain").config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem").config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.3.4,com.amazonaws:aws-java-sdk-bundle:1.11.1026").getOrCreate()
 
   # label encoding multiple cols
@@ -24,15 +24,16 @@ def preprocess_data(df, mode="train"):
   stages.append(assembler)
 
   # only add weights if in training mode
-  if mode == "train" and 'is_fraud' in df.columns:
-
+  if "is_fraud" in df.columns:
     counts = df.groupBy('is_fraud').count().collect()
     count_dict = {row['is_fraud']: row['count'] for row in counts}
     neg = count_dict.get(0,1)
     pos = count_dict.get(1,1)
     total = pos + neg
-    
-  # weight col
+
+
+    # weight col
+
     weight_0 = pos / total
     weight_1 = neg / total
 
