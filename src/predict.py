@@ -1,7 +1,7 @@
 from pyspark.ml.classification import LogisticRegressionModel
 from pyspark.ml.evaluation import BinaryClassificationEvaluator
 from pyspark.ml import PipelineModel
-# from preprocess import preprocess_data
+from preprocess import preprocess_data
 from pyspark.sql import SparkSession
 
 # model path -will edit to make nonlocal
