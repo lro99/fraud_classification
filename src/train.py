@@ -2,7 +2,7 @@ from pyspark.ml.classification import LogisticRegression
 from pyspark.ml import Pipeline, PipelineModel
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import when, col
-# from preprocess import preprocess_data
+from preprocess import preprocess_data
 
 def train_model(data_path, model_path):
 
