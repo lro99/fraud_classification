@@ -1,9 +1,37 @@
 import gradio as gr
 import requests
 
-def predict_fraud(**inputs):
-    response = requests.post("http://flask_api:5000/predict", json=inputs)
-    return "Fraud" if response.json()["prediction"] == 1 else "Not Fraud"
+def predict_fraud(ssn, cc_num, first, last, gender, city, state, zip_code, city_pop, job, dob, acct_num, trans_num, trans_date, trans_time, unix_time, category, amt, merchant):
+
+    url = "http://localhost:5000/predict"
+    payload = {
+        "ssn": ssn,
+        "cc_num": cc_num,
+        "first": first,
+        "last": last,
+        "gender": gender,
+        "city": city,
+        "state": state"
+        "zip": zip_code,
+        "city_pop": city_pop,
+        "job": job,
+        "dob": dob,
+        "acct_num", acct_num,
+        "trans_num", trans_num,
+        "trans_date", trans_date,
+        "trans_time", trans_time,
+        "unix_time", unix_time,
+        "category", category,
+        "amt", amt,
+        "merchant", merchant
+    }
+
+    try:
+        response = requests.post(url, json=payload)
+        result = response.json()
+        return f"Prediction: {'FRAUD' if result['prediction'] == 1 else 'NOT FRAUD'}"
+    except Exception as e:
+        return f"Error: {e}"
 
 # Gradio interface
 iface = gr.Interface(
@@ -29,7 +57,7 @@ iface = gr.Interface(
         gr.Number(label="Amount"),
         gr.Textbox(label="Merchant")
     ],
-    outputs="text",
+    outputs=gr.Text(label="Prediction"),
     title="Fraud Detection App"
 )
 
