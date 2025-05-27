@@ -3,7 +3,7 @@ import requests
 
 def predict_fraud(ssn, cc_num, first, last, gender, city, state, zip_code, city_pop, job, dob, acct_num, trans_num, trans_date, trans_time, unix_time, category, amt, merchant):
 
-    url = "http://localhost:5000/predict"
+    url = "http://flask_api:5000/predict"
     payload = {
         "ssn": ssn,
         "cc_num": cc_num,
