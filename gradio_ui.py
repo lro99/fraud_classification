@@ -11,7 +11,7 @@ def predict_fraud(ssn, cc_num, first, last, gender, city, state, zip_code, city_
         "last": last,
         "gender": gender,
         "city": city,
-        "state": state"
+        "state": state,
         "zip": zip_code,
         "city_pop": city_pop,
         "job": job,
@@ -44,7 +44,7 @@ iface = gr.Interface(
         gr.Dropdown(["M", "F"], label="Gender"),
         gr.Textbox(label="City"),
         gr.Textbox(label="State"),
-        gr.Number(label="ZIP"),
+        gr.Number(label="ZIP Code"),
         gr.Number(label="City Population"),
         gr.Textbox(label="Job"),
         gr.Textbox(label="Date of Birth"),
