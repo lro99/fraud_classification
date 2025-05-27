@@ -16,14 +16,14 @@ def predict_fraud(ssn, cc_num, first, last, gender, city, state, zip_code, city_
         "city_pop": city_pop,
         "job": job,
         "dob": dob,
-        "acct_num", acct_num,
-        "trans_num", trans_num,
-        "trans_date", trans_date,
-        "trans_time", trans_time,
-        "unix_time", unix_time,
-        "category", category,
-        "amt", amt,
-        "merchant", merchant
+        "acct_num": acct_num,
+        "trans_num": trans_num,
+        "trans_date": trans_date,
+        "trans_time": trans_time,
+        "unix_time": unix_time,
+        "category": category,
+        "amt": amt,
+        "merchant": merchant
     }
 
     try:
